@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <a class="btn btn-outline-primary" href="{% url 'accounts:user_profile' posts.user.id %}">PROFILE</a>
+
+    <h2 class="text">{{ posts.title }}</h2>
+    <p>{{ posts.body }}</p>
+    <small class="text-secondary">{{ posts.user }} -- {{ posts.create }}</small>
+        {% if request.user.id == posts.user.id %}
+             <div class="">
+                 <a class="text text-light btn btn-outline-danger" href="{% url 'home:post_delete' posts.id %}">delete</a>
+                 <a class="btn btn-outline-primary" href="{% url 'home:post_update' posts.id %}">UPDATE</a>
+            </div>
+        {% endif %}
+        <p>{{ comments.count }} comments</p>
+    {% for comment in comments %}
+        <div class="card bg-info text-dark">
+            <p class="card-header text-white">{{ comment.user }} -- {{ comment.created|timesince }}</p>
+            <p class="card-body text-light">{{ comment.body }}</p>
+            {% for reply in comment.reply_comment.all %}
+                <p class="card-subtitle  text-white bg-dark col-md-4 p-2 m-3">{{ reply.user }} : {{ reply.created|timesince }}</p>
+                <p class="card-body text-light">{{ reply.body }}</p>
+                {% endfor %}
+        </div>
+        {% empty %}
+        <p class="card bg-light text-black col-md-4">NO COMMENTS YET</p>
+
+    {% endfor %}
+
+{% endblock %}

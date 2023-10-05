@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+{#    <a class="btn btn-primary" href="{% url 'accounts:user_follow' user.id %}">FOLLOW</a>#}
+    {% if request.user.id == post.user.id %}
+        <a class="btn btn-primary" href="{% url 'accounts:user_unfollow' user.id %}">UNFOLLOW</a>
+    {% endif %}
+
+
+    {% for post in  posts %}
+          {% if request.user.is_authenticated and request.user.id != post.user.id %}
+                <a class="btn btn-primary" href="{% url 'accounts:user_follow' user.id %}">FOLLOW</a>
+
+     {% endif %}
+        <p><a class="text-light" href="{% url 'home:post_detail' post.id %}">{{ post }}</a></p>
+        <small class="text-success">{{ post.create|timesince }}</small>
+    {% endfor %
+    }
+{% endblock %}
